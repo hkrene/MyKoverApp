@@ -1,13 +1,13 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, View, Text } from 'react-native';
+import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-
 import "./global.css"
 
 export default function TabLayout() {
@@ -29,19 +29,53 @@ export default function TabLayout() {
         }),
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => 
+          (
+           <View className='flex items-center justify-center'>
+              <FontAwesome5 size={24} name="home" color={color} solid/>
+           </View> 
+          )
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <View className='flex items-center justify-center'>
+              <FontAwesome6 size={24} name="user" color={color} solid />
+            </View>
+          ),
         }}
       />
+         <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => 
+          (
+           <View className='flex items-center justify-center'>
+              <FontAwesome5 size={24} name="gear" color={color} solid/>
+           </View> 
+          )
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Notifications',
+          tabBarIcon: ({ color }) => (
+            <View className='flex items-center justify-center'>
+              <FontAwesome6 size={24} name="bell" color={color} solid />
+            </View>
+          ),
+        }}
+      />
+      
+
     </Tabs>
   );
 }
