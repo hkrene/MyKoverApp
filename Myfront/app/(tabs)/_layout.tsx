@@ -34,7 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => 
           (
            <View className='flex items-center justify-center'>
-              <Ionicons size={24} name="home" color={color}/>
+               <FontAwesome6 size={24} name="house" color={color} solid />
            </View> 
           )
         }}
@@ -69,6 +69,34 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <View className='flex items-center justify-center'>
               <FontAwesome6 size={24} name="bell" color={color} solid />
+            </View>
+          ),
+        }}
+      />
+
+
+
+      {/* Security */}
+
+      <Tabs.Screen
+        name="signup"
+        options={{
+          title: 'Sign Up',
+          tabBarIcon: ({ color }) => 
+          (
+           <View className='flex items-center justify-center'>
+              <FontAwesome6 size={24} name="circle-left" color={color} solid/>
+           </View> 
+          )
+        }}
+      />
+      <Tabs.Screen
+        name="login"
+        options={{
+          title: 'Login',
+          tabBarIcon: ({ color }) => (
+            <View className='flex items-center justify-center'>
+              <FontAwesome6 size={24} name="circle-right" color={color} solid />
             </View>
           ),
         }}
