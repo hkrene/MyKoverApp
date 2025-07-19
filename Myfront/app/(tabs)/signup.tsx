@@ -91,7 +91,20 @@ export default function SignUpScreen() {
     }
 
     Alert.alert("Vous êtes inscrit, bienvenue chez myKover+");
+    resetForm();
   };
+  const resetForm = () => {
+    setFullName('');
+    setEmail('');
+    setPhoneNumber('');
+    setPassword('');
+  
+    setFullNameError('');
+    setEmailError('');
+    setPhoneError('');
+    setPasswordError('');
+  };
+  
 
   return (
     <KeyboardAvoidingView

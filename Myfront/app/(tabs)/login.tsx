@@ -65,7 +65,16 @@ export default function NotificationsScreen() {
     }
 
     Alert.alert("Bienvenue chez myKover+");
+    resetForm();
   };
+  const resetForm = () => {
+    setPhoneNumber('');
+    setPassword('');
+
+    setPhoneError('');
+    setPasswordError('');
+  };
+  
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
@@ -163,7 +172,7 @@ export default function NotificationsScreen() {
           {/* Lien d'inscription */}
           <View style={{ width: 350, marginTop: 20, marginBottom: 10 }}>
             <Text style={{ color: 'gray', fontSize: 16 }}>
-              Vous n'avez pas un compte ? <Link href="/login" style={{ color: '#22B2DC', fontWeight: 'bold' }}>S'inscrire</Link>
+              Vous n'avez pas un compte ? <Link href="/signup" style={{ color: '#22B2DC', fontWeight: 'bold' }}>S'inscrire</Link>
             </Text>
           </View>
         </ScrollView>
