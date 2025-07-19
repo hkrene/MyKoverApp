@@ -1,14 +1,13 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform, View, Text } from 'react-native';
-import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import "./global.css"
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -35,7 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => 
           (
            <View className='flex items-center justify-center'>
-              <FontAwesome5 size={24} name="home" color={color} solid/>
+              <Ionicons size={24} name="home" color={color}/>
            </View> 
           )
         }}
@@ -58,13 +57,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => 
           (
            <View className='flex items-center justify-center'>
-              <FontAwesome5 size={24} name="gear" color={color} solid/>
+              <FontAwesome6 size={24} name="gear" color={color} solid/>
            </View> 
           )
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="notification"
         options={{
           title: 'Notifications',
           tabBarIcon: ({ color }) => (
