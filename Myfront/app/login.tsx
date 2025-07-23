@@ -89,7 +89,7 @@ export default function NotificationsScreen() {
         >
           <View style={{ alignItems: 'center', marginBottom: 40 }}>
             <Image source={require('@/assets/images/myKover+Logo.png')} style={{ width: 150, height: 150 }} />
-            <Text style={{ color: 'gray', fontSize: 24, fontWeight: 'bold' }}>Login</Text>
+            <Text style={{ color: 'gray', fontSize: 24, fontWeight: 'bold' }}>Connexion</Text>
           </View>
 
           {/* Téléphone */}
