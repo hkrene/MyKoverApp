@@ -2,10 +2,11 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Switch } from 'react-native'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router' // Added useRouter
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets()
+  const router = useRouter() // Get router instance
   const [notifEnabled, setNotifEnabled] = React.useState(true)
 
   const SettingItem = ({ icon, label, href }) => (
@@ -27,6 +28,16 @@ export default function SettingsScreen() {
 
   return (
     <View className="flex-1 px-5 pb-6 bg-gray-50" style={{ paddingTop: insets.top + 70 }}>
+      
+      {/* Back button */}
+      <TouchableOpacity
+        onPress={() => router.back()}
+        className="absolute p-2 bg-white rounded-full shadow top-14 left-5"
+        activeOpacity={0.7}
+      >
+        <MaterialIcons name="arrow-back" size={28} color="#22B2DC" />
+      </TouchableOpacity>
+      
       <Text className="mb-6 text-4xl font-semibold text-neutral-800">Paramètres</Text>
 
       {/* Mon compte */}

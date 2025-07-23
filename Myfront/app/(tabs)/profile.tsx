@@ -29,7 +29,16 @@ export default function ProfileScreen() {
   ]
 
   return (
-    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 40 }}>
+    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 40, paddingTop: 80 }}>
+      {/* Back button */}
+      <TouchableOpacity
+        onPress={() => router.back()}
+        className="absolute z-10 p-2 bg-white rounded-full shadow top-12 left-5"
+        activeOpacity={0.7}
+      >
+        <MaterialIcons name="arrow-back" size={28} color="#22B2DC" />
+      </TouchableOpacity>
+
       {/* User info */}
       <View className="items-center pt-12 pb-8 bg-white shadow-sm">
         <View className="relative">
