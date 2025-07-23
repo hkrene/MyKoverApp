@@ -23,8 +23,8 @@ export default function NotificationsScreen() {
   )
 
   return (
-    <View className="flex-1 px-5 bg-gray-50" style={{ paddingTop: insets.top + 10 }}>
-      <Text className="mb-6 text-2xl font-bold text-neutral-800">Notifications</Text>
+    <View className="flex-1 px-5 bg-gray-50" style={{ paddingTop: insets.top + 70 }}>
+      <Text className="mb-6 text-2xl font-semibold text-neutral-800">Notifications</Text>
 
       {notifications.length > 0 ? (
         <FlatList
