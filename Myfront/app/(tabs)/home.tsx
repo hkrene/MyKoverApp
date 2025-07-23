@@ -19,10 +19,10 @@ export default function HomePublic() {
 
       {/* Benefits Section */}
       <View className="mb-12">
-        <Text className="mb-4 text-xl font-semibold text-neutral-800">
-          Pourquoi choisir myKover+ ?
+        <Text className="mb-4 text-xl font-semibold text-cyan-500 text-center">
+          Votre sante , notre priorite
         </Text>
-
+      </View>
       <View className="h-[70%] flex flex-col gap-y-8">
 
         {/* Avantages */}
@@ -85,5 +85,5 @@ export default function HomePublic() {
         </View>
       </View>
     </View>
-  )
+  );
 }
