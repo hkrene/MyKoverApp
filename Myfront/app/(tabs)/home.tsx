@@ -1,4 +1,3 @@
-// app/components/HomePublic.tsx
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { Link } from 'expo-router'
@@ -18,10 +17,11 @@ export default function HomePublic() {
         />
       </View>
 
-      {/* Accroche */}
-      <Text className="text-xl font-semibold text-center text-primary mb-8">
-        Votre santé, notre priorité.
-      </Text>
+      {/* Benefits Section */}
+      <View className="mb-12">
+        <Text className="mb-4 text-xl font-semibold text-neutral-800">
+          Pourquoi choisir myKover+ ?
+        </Text>
 
       <View className="h-[70%] flex flex-col gap-y-8">
 
@@ -87,5 +87,3 @@ export default function HomePublic() {
     </View>
   )
 }
-
-
