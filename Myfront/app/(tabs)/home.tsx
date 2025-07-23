@@ -1,4 +1,3 @@
-// app/components/HomePublic.tsx
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { Link } from 'expo-router'
@@ -6,74 +5,83 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default function HomePublic() {
   return (
-    <View className="flex-1 bg-white items-center px-4 pt-12">
-      {/* Logo */}
-      <Image
-        source={require('@/assets/images/myKover+Logo.png')}
-        style={{ width: 100, height: 100 }}
-        className="mb-6"
-        resizeMode="contain"
-      />
+    <View className="flex-1 px-6 pt-16 pb-10 bg-white">
+      
+      {/* Logo and Header */}
+      <View className="items-center mb-12">
+        <Image
+          source={require('@/assets/images/myKover+Logo.png')}
+          style={{ width: 120, height: 120 }}
+          resizeMode="contain"
+          className="mb-4"
+        />
+        <Text className="mb-1 text-3xl font-extrabold text-center text-primary">
+          Votre santé, notre priorité
+        </Text>
+        <Text className="text-base leading-relaxed text-center text-neutral-500">
+          Une couverture santé simple, rapide et accessible
+        </Text>
+      </View>
 
-      {/* Accroche */}
-      <Text className="text-xl font-semibold text-center text-primary mb-8">
-        Votre santé, notre priorité.
-      </Text>
+      {/* Benefits Section */}
+      <View className="mb-12">
+        <Text className="mb-4 text-xl font-semibold text-neutral-800">
+          Pourquoi choisir myKover+ ?
+        </Text>
 
-      {/* Avantages */}
-      <View className="w-full space-y-4 mb-8">
-        {/* Card 1 */}
-        <View className="bg-neutral-100 rounded-2xl shadow p-4 border border-gray-200">
-          <View className="flex-row items-center space-x-3">
-            <FontAwesome5 name="hand-holding-medical" size={20} color="#22B2DC" />
-            <Text className="text-neutral-700 font-semibold">
-              Remboursement rapide
-            </Text>
-          </View>
-          <Text className="text-neutral-700 mt-2">
-            Recevez vos remboursements en 72h.
-          </Text>
-        </View>
-
-        {/* Card 2 */}
-        <View className="bg-neutral-100 rounded-2xl shadow p-4 border border-gray-200">
-          <View className="flex-row items-center space-x-3">
-            <FontAwesome5 name="shield-alt" size={20} color="#22B2DC" />
-            <Text className="text-neutral-700 font-semibold">
-              Couverture étendue
-            </Text>
-          </View>
-          <Text className="text-neutral-700 mt-2">
-            Soins, pharmacie, hospitalisation et plus.
-          </Text>
-        </View>
-
-        {/* Card 3 */}
-        <View className="bg-neutral-100 rounded-2xl shadow p-4 border border-gray-200">
-          <View className="flex-row items-center space-x-3">
-            <FontAwesome5 name="headset" size={20} color="#22B2DC" />
-            <Text className="text-neutral-700 font-semibold">
-              Assistance 24/7
-            </Text>
-          </View>
-          <Text className="text-neutral-700 mt-2">
-            Un accompagnement humain à tout moment.
-          </Text>
+        <View className="space-y-4">
+          {/* Card Component */}
+          {[
+            {
+              icon: 'hand-holding-medical',
+              title: 'Remboursement rapide',
+              desc: 'Recevez vos remboursements en 72h chrono.',
+            },
+            {
+              icon: 'shield-alt',
+              title: 'Couverture étendue',
+              desc: 'Soins, pharmacie, hospitalisation et plus.',
+            },
+            {
+              icon: 'headset',
+              title: 'Assistance 24/7',
+              desc: 'Un accompagnement humain à tout moment.',
+            },
+          ].map((item, index) => (
+            <View
+              key={index}
+              className="flex-row items-start p-5 space-x-4 border border-blue-100 shadow-sm bg-blue-50 rounded-2xl"
+            >
+              <View className="p-3 rounded-full bg-primary/10">
+                <FontAwesome5 name={item.icon} size={18} color="#22B2DC" />
+              </View>
+              <View className="flex-1">
+                <Text className="mb-1 text-base font-semibold text-neutral-800">
+                  {item.title}
+                </Text>
+                <Text className="text-sm text-neutral-600">
+                  {item.desc}
+                </Text>
+              </View>
+            </View>
+          ))}
         </View>
       </View>
 
-      {/* CTA Buttons */}
-      <View className="w-full space-y-4">
-        <Link href="/login" asChild>
-          <TouchableOpacity className="bg-white border border-primary rounded-full py-3 items-center">
-            <Text className="text-primary font-semibold">Se connecter</Text>
+      {/* CTA Section */}
+      <View className="mt-auto space-y-4">
+        <Link href="/signup" asChild>
+          <TouchableOpacity className="w-full py-4 rounded-full shadow-md bg-primary active:bg-primary/90">
+            <Text className="text-lg font-bold text-center text-white">
+              Je prends mon assurance santé
+            </Text>
           </TouchableOpacity>
         </Link>
 
-        <Link href="/signup" asChild>
-          <TouchableOpacity className="bg-primary rounded-full py-3 items-center">
-            <Text className="text-white font-semibold">
-              Je prends mon assurance santé
+        <Link href="/login" asChild>
+          <TouchableOpacity className="w-full py-4 border rounded-full border-primary">
+            <Text className="text-lg font-semibold text-center text-primary">
+              Se connecter
             </Text>
           </TouchableOpacity>
         </Link>
@@ -81,5 +89,3 @@ export default function HomePublic() {
     </View>
   )
 }
-
-
