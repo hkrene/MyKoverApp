@@ -78,32 +78,19 @@ export default function TabLayout() {
 
 
 
-      {/* Security */}
 
       <Tabs.Screen
-        name="signup"
+        name="payments"
         options={{
-          title: 'Sign Up',
+          title: 'Payments',
           tabBarIcon: ({ color }) => 
           (
            <View className='flex items-center justify-center'>
-              <FontAwesome6 size={24} name="circle-left" color={color} solid/>
+              <FontAwesome6 size={24} name="credit-card" color={color} solid/>
            </View> 
           )
         }}
       />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: 'Login',
-          tabBarIcon: ({ color }) => (
-            <View className='flex items-center justify-center'>
-              <FontAwesome6 size={24} name="circle-right" color={color} solid />
-            </View>
-          ),
-        }}
-      />
-      
 
     </Tabs>
   );
