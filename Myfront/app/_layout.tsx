@@ -7,6 +7,7 @@ import ".././global.css"
 
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { View, Text } from 'react-native';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
