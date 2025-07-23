@@ -115,7 +115,7 @@ export default function SignUpScreen() {
         <ScrollView contentContainerStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
           <View style={{ alignItems: 'center', marginBottom: 40 }}>
             <Image source={require('@/assets/images/myKover+Logo.png')} style={{ width: 150, height: 150 }} />
-            <Text style={{ color: 'gray', fontSize: 24, fontWeight: 'bold' }}>Sign up</Text>
+            <Text style={{ color: 'gray', fontSize: 24, fontWeight: 'bold' }}>Inscription</Text>
           </View>
 
           {/* Nom complet */}
