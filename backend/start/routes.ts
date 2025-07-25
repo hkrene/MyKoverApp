@@ -14,3 +14,9 @@ router.get('/', async () => {
     hello: 'world',
   }
 })
+
+router.group(() => {
+  router.post('/signup', '#controllers/auth_controller.signup')
+  router.post('/login', '#controllers/auth_controller.login')
+  router.post('/logout', '#controllers/auth_controller.logout')
+}).prefix('/auth')

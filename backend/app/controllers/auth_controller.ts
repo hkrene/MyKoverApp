@@ -1,40 +1,48 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
+import { signupValidator } from '#validators/auth'
+import hash from '@adonisjs/core/services/hash'
+
+
 
 export default class AuthController {
-    public async signup({request, response}:HttpContext){
-        const { fullName, email, password } = request.only(['fullName', 'email', 'password'])
+    async signup({ request, response }: HttpContext) {
+        const data = await request.validateUsing(signupValidator)
 
         const user = await User.create({
-        fullName,
-        email,
-        password,
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
+        email:data.email,
+        password: await hash.make(data.password),
         })
+
+        const token = await User.accessTokens.create(user)
 
         return response.created({
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
+        user: user.serialize(),
+        token,
         })
-
     }
 
-    public async login({request, response, auth}:HttpContext){
-            const { email, password } = request.only(['email', 'password'])
-            try {
-              const token = await auth.use('api').attempt(email, password)
-        
-              return {
-                type: token.type,
-                token: token.token,
-                expires_at: token.expiresAt,
-                user: auth.user,
-              }
-            } catch {
-              return response.unauthorized({ message: 'Email ou mot de passe invalide' })
-            }
+    
+    async login({ request, response }: HttpContext) {
+        const phoneNumber = request.input('phoneNumber')
+        const password = request.input('password')
+
+        const user = await User.findByOrFail('phoneNumber', phoneNumber)
+        if (!user) return response.unauthorized({ message: 'Numéro incorrect' })
+
+        const passwordValid = await user.verifyPassword(password)
+        if (!passwordValid)
+        return response.unauthorized({ message: 'Mot de passe incorrect' })
+
+        const token = await User.accessTokens.create(user)
+        return response.ok({ user: user.serialize(), token })
     }
 
-
+    async logout({ auth, response }: HttpContext) {
+        await auth.use('api').invalidateToken()
+        return response.ok({ message: 'Déconnecté avec succès' })
+    }
 
 }
