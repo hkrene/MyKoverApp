@@ -15,7 +15,7 @@ import {
 import { Link } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 
-export default function NotificationsScreen() {
+export default function LoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [phoneError, setPhoneError] = useState('');
