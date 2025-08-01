@@ -81,6 +81,7 @@ export default function SignUpScreen() {
       signupUser();
       resetForm();
       Alert.alert("Bienvenue chez myKover+ votre compte a été créé avec succès");
+      router.push('./(tabs)/home')
     } else {
       Alert.alert("Erreur", "Veuillez remplir tous les champs");
     }
