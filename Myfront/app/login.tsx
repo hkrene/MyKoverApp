@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 
 export default function LoginScreen() {
@@ -66,6 +67,7 @@ export default function LoginScreen() {
 
     Alert.alert("Bienvenue chez myKover+");
     resetForm();
+    router.replace('./(tabs)/home');
   };
   const resetForm = () => {
     setPhoneNumber('');

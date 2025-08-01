@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   View,
@@ -92,6 +93,7 @@ export default function SignUpScreen() {
 
     Alert.alert("Vous êtes inscrit, bienvenue chez myKover+");
     resetForm();
+    router.replace('./(tabs)');
   };
   const resetForm = () => {
     setFullName('');
