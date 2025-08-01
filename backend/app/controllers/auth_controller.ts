@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
-import { signupValidator } from '#validators/auth'
+import { loginValidator, signupValidator } from '#validators/auth'
 import hash from '@adonisjs/core/services/hash'
 
 
@@ -26,9 +26,7 @@ export default class AuthController {
 
     
     async login({ request, response }: HttpContext) {
-        const phoneNumber = request.input('phoneNumber')
-        const password = request.input('password')
-
+        const {phoneNumber, password }= await request.validateUsing(loginValidator)
         const user = await User.findByOrFail('phoneNumber', phoneNumber)
         if (!user) return response.unauthorized({ message: 'Numéro incorrect' })
 

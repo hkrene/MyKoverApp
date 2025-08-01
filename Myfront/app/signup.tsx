@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { Link } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import api from '@/services/api';
 
 export default function SignUpScreen() {
   const [fullName, setFullName] = useState('');
@@ -76,25 +77,15 @@ export default function SignUpScreen() {
   };
 
   const handleSubmit = () => {
-    validateFullName(fullName);
-    validateEmail(email);
-    validatePhone(phoneNumber);
-    validatePassword(password);
-
-    if (
-      !fullName || fullNameError ||
-      !email || emailError ||
-      !phoneNumber || phoneError ||
-      !password || passwordError
-    ) {
-      Alert.alert("Formulaire invalide", "Veuillez corriger les erreurs");
-      return;
+    if (fullName && email && phoneNumber && password) {
+      signupUser();
+      resetForm();
+      Alert.alert("Bienvenue chez myKover+ votre compte a été créé avec succès");
+    } else {
+      Alert.alert("Erreur", "Veuillez remplir tous les champs");
     }
-
-    Alert.alert("Vous êtes inscrit, bienvenue chez myKover+");
-    resetForm();
-    router.replace('./(tabs)');
   };
+
   const resetForm = () => {
     setFullName('');
     setEmail('');
@@ -106,6 +97,33 @@ export default function SignUpScreen() {
     setPhoneError('');
     setPasswordError('');
   };
+
+  const signupUser = async () => {
+    try {
+      const response = await api.post('/signup', {
+        fullName: fullName,
+        email,
+        phoneNumber: phoneNumber,
+        password,
+      });
+  
+      if (response.status === 201 || response.status === 200) {
+        Alert.alert("Succès", "Inscription réussie !");
+        resetForm();
+      } else {
+        Alert.alert("Erreur", "Une erreur est survenue, veuillez réessayer.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        // Erreurs de validation côté serveur
+        const message = error.response.data?.message || "Erreur lors de l'inscription.";
+        Alert.alert("Erreur", message);
+      } else {
+        Alert.alert("Erreur", "Impossible de contacter le serveur.");
+      }
+    }
+  };
+  
   
 
   return (
