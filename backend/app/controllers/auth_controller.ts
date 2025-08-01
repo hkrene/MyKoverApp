@@ -8,7 +8,7 @@ import hash from '@adonisjs/core/services/hash'
 export default class AuthController {
     async signup({ request, response }: HttpContext) {
         const data = await request.validateUsing(signupValidator)
-
+        console.log(data);
         const user = await User.create({
         fullName: data.fullName,
         phoneNumber: data.phoneNumber,
