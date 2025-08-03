@@ -1,35 +1,107 @@
-import React from 'react'
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator, Alert, RefreshControl } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import api from '@/services/api'
+
+interface User {
+  id: number
+  fullName: string
+  email: string
+  phoneNumber: string
+  avatar: string
+}
+
+interface Policy {
+  planName: string
+  policyNumber: string
+  expiryDate: string
+  status: string
+  coverage: string
+  deductible: string
+}
+
+interface ProfileData {
+  user: User
+  policy: Policy | null
+}
 
 export default function ProfileScreen() {
   const router = useRouter()
+  const [profileData, setProfileData] = useState<ProfileData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const user = {
-    name: 'Newton Renesto',
-    email: 'newton@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=12',
+  useEffect(() => {
+    fetchProfileData()
+  }, [])
+
+  const fetchProfileData = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      console.log('Fetching profile data...')
+      const response = await api.get('/api/profile')
+      console.log('Profile data received:', response.data)
+      
+      setProfileData(response.data)
+    } catch (error: any) {
+      console.error('Error fetching profile data:', error)
+      const errorMessage = error.response?.data?.message || 'Erreur lors du chargement du profil'
+      setError(errorMessage)
+      Alert.alert('Erreur', errorMessage)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const policy = {
-    planName: 'Plan Santé Basique',
-    policyNumber: 'ASS-123456789',
-    expiryDate: '2026-03-01',
-    status: 'Actif',
-    coverage: 'Médical, Dentaire, Vision',
-    deductible: '500 $',
+  const onRefresh = async () => {
+    setRefreshing(true)
+    await fetchProfileData()
+    setRefreshing(false)
   }
 
   const actions = [
-    { label: 'Voir les réclamations', icon: 'receipt', onPress: () => alert('Naviguer vers les réclamations') },
-    { label: 'Effectuer un paiement', icon: 'payment', onPress: () => router.push('/payments') },
-    { label: 'Contacter le support', icon: 'support-agent', onPress: () => alert('Ouvrir le chat support') },
-    { label: 'Documents de la police', icon: 'description', onPress: () => alert('Voir les documents') },
+    { label: 'Voir les réclamations', icon: 'receipt' as const, onPress: () => alert('Naviguer vers les réclamations') },
+    { label: 'Effectuer un paiement', icon: 'payment' as const, onPress: () => router.push('/payments') },
+    { label: 'Contacter le support', icon: 'support-agent' as const, onPress: () => alert('Ouvrir le chat support') },
+    { label: 'Documents de la police', icon: 'description' as const, onPress: () => alert('Voir les documents') },
   ]
 
+  if (loading) {
+    return (
+      <View className="items-center justify-center flex-1 bg-gray-50">
+        <ActivityIndicator size="large" color="#22B2DC" />
+        <Text className="mt-4 text-gray-600">Chargement du profil...</Text>
+      </View>
+    )
+  }
+
+  if (error || !profileData) {
+    return (
+      <View className="items-center justify-center flex-1 bg-gray-50">
+        <MaterialIcons name="error" size={64} color="#FF6B6B" />
+        <Text className="mt-4 text-gray-600">{error || 'Erreur de chargement'}</Text>
+        <TouchableOpacity
+          onPress={fetchProfileData}
+          className="mt-4 px-6 py-3 bg-[#22B2DC] rounded-lg"
+        >
+          <Text className="font-medium text-white">Réessayer</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  const { user, policy } = profileData
+
   return (
-    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 40, paddingTop: 80 }}>
+    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 40, paddingTop: 80 }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#22B2DC']} />
+      }
+    >
       {/* Back button */}
       <TouchableOpacity
         onPress={() => router.back()}
@@ -50,48 +122,63 @@ export default function ProfileScreen() {
             <MaterialIcons name="edit" size={20} color="white" />
           </View>
         </View>
-        <Text className="text-3xl font-bold text-[#222222]">{user.name}</Text>
+        <Text className="text-3xl font-bold text-[#222222]">{user.fullName}</Text>
         <Text className="mt-2 text-base text-[#555555]">{user.email}</Text>
       </View>
 
       {/* Policy summary */}
-      <View className="p-6 mx-6 mt-8 bg-white shadow-sm rounded-xl">
-        <View className="flex-row items-center justify-between mb-4">
-          <Text className="text-xl font-bold text-[#222222]">Plan actuel</Text>
-          <View className={`px-3 py-1 rounded-full ${policy.status === 'Actif' ? 'bg-green-100' : 'bg-red-100'}`}>
-            <Text className={`text-sm font-medium ${policy.status === 'Actif' ? 'text-green-800' : 'text-red-800'}`}>
-              {policy.status}
+      {policy && (
+        <View className="p-6 mx-6 mt-8 bg-white shadow-sm rounded-xl">
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-xl font-bold text-[#222222]">Plan actuel</Text>
+            <View className={`px-3 py-1 rounded-full ${policy.status === 'Actif' ? 'bg-green-100' : 'bg-red-100'}`}>
+              <Text className={`text-sm font-medium ${policy.status === 'Actif' ? 'text-green-800' : 'text-red-800'}`}>
+                {policy.status}
+              </Text>
+            </View>
+          </View>
+
+          <View className="space-y-4">
+            <View className="flex-row justify-between">
+              <Text className="text-[#555555]">Nom du plan</Text>
+              <Text className="font-medium text-[#222222]">{policy.planName}</Text>
+            </View>
+
+            <View className="flex-row justify-between">
+              <Text className="text-[#555555]">Numéro de police</Text>
+              <Text className="font-medium text-[#222222]">{policy.policyNumber}</Text>
+            </View>
+
+            <View className="flex-row justify-between">
+              <Text className="text-[#555555]">Date d'expiration</Text>
+              <Text className="font-medium text-[#222222]">{policy.expiryDate}</Text>
+            </View>
+
+            <View className="flex-row justify-between">
+              <Text className="text-[#555555]">Couverture</Text>
+              <Text className="font-medium text-right text-[#222222]">{policy.coverage}</Text>
+            </View>
+
+            <View className="flex-row justify-between">
+              <Text className="text-[#555555]">Franchise</Text>
+              <Text className="font-medium text-[#222222]">{policy.deductible}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {/* No policy message */}
+      {!policy && (
+        <View className="p-6 mx-6 mt-8 bg-white shadow-sm rounded-xl">
+          <View className="items-center py-8">
+            <MaterialIcons name="description" size={48} color="#999999" />
+            <Text className="mt-4 text-lg font-medium text-gray-600">Aucun plan actif</Text>
+            <Text className="mt-2 text-sm text-center text-gray-500">
+              Vous n'avez pas encore de plan d'assurance actif
             </Text>
           </View>
         </View>
-
-        <View className="space-y-4">
-          <View className="flex-row justify-between">
-            <Text className="text-[#555555]">Nom du plan</Text>
-            <Text className="font-medium text-[#222222]">{policy.planName}</Text>
-          </View>
-
-          <View className="flex-row justify-between">
-            <Text className="text-[#555555]">Numéro de police</Text>
-            <Text className="font-medium text-[#222222]">{policy.policyNumber}</Text>
-          </View>
-
-          <View className="flex-row justify-between">
-            <Text className="text-[#555555]">Date d'expiration</Text>
-            <Text className="font-medium text-[#222222]">{policy.expiryDate}</Text>
-          </View>
-
-          <View className="flex-row justify-between">
-            <Text className="text-[#555555]">Couverture</Text>
-            <Text className="font-medium text-right text-[#222222]">{policy.coverage}</Text>
-          </View>
-
-          <View className="flex-row justify-between">
-            <Text className="text-[#555555]">Franchise</Text>
-            <Text className="font-medium text-[#222222]">{policy.deductible}</Text>
-          </View>
-        </View>
-      </View>
+      )}
 
       {/* Quick action buttons */}
       <View className="mx-6 mt-8 space-y-4">

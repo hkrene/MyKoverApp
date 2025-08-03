@@ -1,28 +1,22 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
-import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Policy from './policy.js'
 
-const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
-  passwordColumnName: 'password',
-})
-
-export default class User extends compose(BaseModel, AuthFinder) {
+export default class User extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({ columnName: 'full_name' })
   declare fullName: string
 
   @column()
   declare email: string
 
-  @column()
+  @column({ columnName: 'phone_number' })
   declare phoneNumber: string
-
 
   @column({ serializeAs: null })
   declare password: string
@@ -34,4 +28,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
+
+  async verifyPassword(password: string): Promise<boolean> {
+    return await hash.verify(this.password, password)
+  }
+
+  @hasMany(() => Policy)
+  declare policies: HasMany<typeof Policy>
 }

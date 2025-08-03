@@ -15,6 +15,8 @@ import {
 import { Link } from 'expo-router';
 import { router } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '@/services/api';
 
 export default function LoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -65,9 +67,38 @@ export default function LoginScreen() {
       return;
     }
 
-    Alert.alert("Bienvenue chez myKover+");
-    resetForm();
-    router.replace('./(tabs)/home');
+    loginUser();
+  };
+
+  const loginUser = async () => {
+    try {
+      const response = await api.post('/auth/login', {
+        phoneNumber: phoneNumber,
+        password: password,
+      });
+
+      if (response.status === 200) {
+        // Store the authentication token
+        const token = response.data.token?.token;
+        if (token) {
+          await AsyncStorage.setItem('authToken', token);
+          console.log('Token stored successfully');
+        }
+        
+        Alert.alert("Succès", "Connexion réussie !");
+        resetForm();
+        router.replace('./(tabs)/home');
+      } else {
+        Alert.alert("Erreur", "Une erreur est survenue, veuillez réessayer.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const message = error.response.data?.message || "Erreur lors de la connexion.";
+        Alert.alert("Erreur", message);
+      } else {
+        Alert.alert("Erreur", "Impossible de contacter le serveur.");
+      }
+    }
   };
   const resetForm = () => {
     setPhoneNumber('');

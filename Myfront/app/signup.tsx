@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { Link } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '@/services/api';
 
 export default function SignUpScreen() {
@@ -38,6 +39,7 @@ export default function SignUpScreen() {
     } else {
       setFullNameError("");
     }
+    console.log('FullName validation:', value, !value.trim() ? 'error' : 'valid');
   };
 
   const validateEmail = (value:string) => {
@@ -50,6 +52,7 @@ export default function SignUpScreen() {
     } else {
       setEmailError("");
     }
+    console.log('Email validation:', value, !value || !emailRegex.test(value) ? 'error' : 'valid');
   };
 
   const validatePhone = (value:string) => {
@@ -62,28 +65,31 @@ export default function SignUpScreen() {
     } else {
       setPhoneError("");
     }
+    console.log('Phone validation:', value, !value || !phoneRegex.test(value) ? 'error' : 'valid');
   };
 
   const validatePassword = (value:string) => {
     setPassword(value);
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!value) {
       setPasswordError("Le mot de passe est obligatoire");
-    } else if (!passwordRegex.test(value)) {
-      setPasswordError("Min. 8 caractères, 1 maj, 1 min, 1 chiffre");
+    } else if (value.length < 6) {
+      setPasswordError("Le mot de passe doit contenir au moins 6 caractères");
     } else {
       setPasswordError("");
     }
+    console.log('Password validation:', value, !value || value.length < 6 ? 'error' : 'valid');
   };
 
   const handleSubmit = () => {
-    if (fullName && email && phoneNumber && password) {
+    console.log('Form data:', { fullName, email, phoneNumber, password });
+    console.log('Errors:', { fullNameError, emailError, phoneError, passwordError });
+    
+    if (fullName && email && phoneNumber && password && !fullNameError && !emailError && !phoneError && !passwordError) {
+      console.log('Submitting form...');
       signupUser();
-      resetForm();
-      Alert.alert("Bienvenue chez myKover+ votre compte a été créé avec succès");
-      router.push('./(tabs)/home')
     } else {
-      Alert.alert("Erreur", "Veuillez remplir tous les champs");
+      console.log('Form validation failed');
+      Alert.alert("Erreur", "Veuillez remplir tous les champs correctement");
     }
   };
 
@@ -101,20 +107,38 @@ export default function SignUpScreen() {
 
   const signupUser = async () => {
     try {
-      const response = await api.post('/signup', {
+      console.log('Making API call to /auth/signup with data:', {
+        fullName: fullName,
+        email,
+        phoneNumber: phoneNumber,
+        password: password ? '***' : 'undefined'
+      });
+      
+      const response = await api.post('/auth/signup', {
         fullName: fullName,
         email,
         phoneNumber: phoneNumber,
         password,
       });
   
+      console.log('API response:', response.status, response.data);
+      
       if (response.status === 201 || response.status === 200) {
+        // Store the authentication token
+        const token = response.data.token?.token;
+        if (token) {
+          await AsyncStorage.setItem('authToken', token);
+          console.log('Token stored successfully');
+        }
+        
         Alert.alert("Succès", "Inscription réussie !");
         resetForm();
+        router.push('./(tabs)/home');
       } else {
         Alert.alert("Erreur", "Une erreur est survenue, veuillez réessayer.");
       }
     } catch (error: any) {
+      console.error('Signup error:', error);
       if (error.response) {
         // Erreurs de validation côté serveur
         const message = error.response.data?.message || "Erreur lors de l'inscription.";
@@ -241,6 +265,34 @@ export default function SignUpScreen() {
           </View>
 
 
+          {/* Test de connexion */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#FF6B6B',
+              padding: 10,
+              borderRadius: 10,
+              width: 350,
+              height: 40,
+              alignItems: 'center',
+              marginTop: 10,
+            }}
+            onPress={async () => {
+              try {
+                console.log('Testing API connection...');
+                const response = await api.get('/test-user/+243820000007');
+                console.log('Test response:', response.data);
+                Alert.alert("Test", "Connexion API réussie!");
+              } catch (error) {
+                console.error('Test error:', error);
+                Alert.alert("Test", "Erreur de connexion API");
+              }
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+              Test Connexion API
+            </Text>
+          </TouchableOpacity>
+
           {/* Bouton d'inscription */}
           <TouchableOpacity
             style={{
@@ -252,7 +304,10 @@ export default function SignUpScreen() {
               alignItems: 'center',
               marginTop: 10,
             }}
-            onPress={handleSubmit}
+            onPress={() => {
+              console.log('Submit button pressed');
+              handleSubmit();
+            }}
           >
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
               S'inscrire
