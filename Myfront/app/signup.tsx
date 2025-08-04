@@ -266,7 +266,7 @@ export default function SignUpScreen() {
 
 
           {/* Test de connexion */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               backgroundColor: '#FF6B6B',
               padding: 10,
@@ -279,7 +279,7 @@ export default function SignUpScreen() {
             onPress={async () => {
               try {
                 console.log('Testing API connection...');
-                const response = await api.get('/test-user/+243820000007');
+                const response = await api.get('/');
                 console.log('Test response:', response.data);
                 Alert.alert("Test", "Connexion API réussie!");
               } catch (error) {
@@ -291,7 +291,36 @@ export default function SignUpScreen() {
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
               Test Connexion API
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          {/* Test de connexion avec IP directe */}
+          {/* <TouchableOpacity
+            style={{
+              backgroundColor: '#FF8C00',
+              padding: 10,
+              borderRadius: 10,
+              width: 350,
+              height: 40,
+              alignItems: 'center',
+              marginTop: 10,
+            }}
+            onPress={async () => {
+              try {
+                console.log('Testing direct IP connection...');
+                const response = await fetch('http://172.24.157.111:3333/');
+                const data = await response.json();
+                console.log('Direct IP test response:', data);
+                Alert.alert("Test IP Direct", "Connexion IP directe réussie!");
+              } catch (error) {
+                console.error('Direct IP test error:', error);
+                Alert.alert("Test IP Direct", "Erreur de connexion IP directe");
+              }
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+              Test IP Directe
+            </Text>
+          </TouchableOpacity> */}
 
           {/* Bouton d'inscription */}
           <TouchableOpacity
