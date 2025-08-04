@@ -191,6 +191,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Linking } from 'react-
 import { Link } from 'expo-router';
 import { FontAwesome5, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import TopNavbar from '@/components/TopNavbar';
 
 export default function HomePublic() {
   const handleEmergencyCall = () => {
@@ -198,11 +199,13 @@ export default function HomePublic() {
   };
 
   return (
-    <ScrollView 
-      className="flex-1 bg-gray-50"
-      contentContainerStyle={{ paddingBottom: 30 }}
-      showsVerticalScrollIndicator={false}
-    >
+    <View className="flex-1 bg-gray-50">
+      <TopNavbar title="Accueil" />
+      <ScrollView 
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 30 }}
+        showsVerticalScrollIndicator={false}
+      >
       {/* Hero Section */}
       <View className="px-6 pt-12 pb-10 bg-gradient-to-b from-[#22B2DC] to-[#CFF1F9] rounded-b-3xl">
         <Animated.View entering={FadeIn.duration(600)} className="items-center mb-6">
@@ -355,5 +358,6 @@ export default function HomePublic() {
         </View>
       </Animated.View>
     </ScrollView>
+    </View>
   );
 }

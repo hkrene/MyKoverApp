@@ -72,10 +72,15 @@ export default function LoginScreen() {
 
   const loginUser = async () => {
     try {
+      console.log('Attempting login with:', { phoneNumber, password: password ? '***' : 'undefined' })
+      console.log('API base URL:', api.defaults.baseURL)
+      
       const response = await api.post('/auth/login', {
         phoneNumber: phoneNumber,
         password: password,
       });
+
+      console.log('Login response:', response.status, response.data)
 
       if (response.status === 200) {
         // Store the authentication token
@@ -92,6 +97,11 @@ export default function LoginScreen() {
         Alert.alert("Erreur", "Une erreur est survenue, veuillez réessayer.");
       }
     } catch (error: any) {
+      console.error('Login error details:', error)
+      console.error('Error response:', error.response?.data)
+      console.error('Error status:', error.response?.status)
+      console.error('Error message:', error.message)
+      
       if (error.response) {
         const message = error.response.data?.message || "Erreur lors de la connexion.";
         Alert.alert("Erreur", message);
@@ -187,7 +197,7 @@ export default function LoginScreen() {
           </View>
 
           {/* Test de connexion API */}
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={{
               backgroundColor: '#FF6B6B',
               padding: 10,
@@ -212,10 +222,10 @@ export default function LoginScreen() {
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
               Test Connexion API
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
 
           {/* Test de connexion avec IP directe */}
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={{
               backgroundColor: '#FF8C00',
               padding: 10,
@@ -241,7 +251,7 @@ export default function LoginScreen() {
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
               Test IP Directe
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
 
           {/* Bouton */}
           <TouchableOpacity

@@ -4,6 +4,7 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Link, useRouter } from 'expo-router' // Added useRouter
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import TopNavbar from '@/components/TopNavbar'
 import api from '@/services/api'
 
 export default function SettingsScreen() {
@@ -42,7 +43,7 @@ export default function SettingsScreen() {
     )
   }
 
-  const SettingItem = ({ icon, label, href }: { icon: string; label: string; href: string }) => (
+  const SettingItem = ({ icon, label, href }: { icon: string; label: string; href: any }) => (
     <Link href={href} asChild>
       <TouchableOpacity
         activeOpacity={0.8}
@@ -60,17 +61,9 @@ export default function SettingsScreen() {
   )
 
   return (
-    <View className="flex-1 px-5 pb-6 bg-gray-50" style={{ paddingTop: insets.top + 70 }}>
-      
-      {/* Back button */}
-      <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute p-2 bg-white rounded-full shadow top-14 left-5"
-        activeOpacity={0.7}
-      >
-        <MaterialIcons name="arrow-back" size={28} color="#22B2DC" />
-      </TouchableOpacity>
-      
+    <View className="flex-1 bg-gray-50">
+      <TopNavbar title="Paramètres" />
+      <View className="flex-1 px-5 pb-6">
       <Text className="mb-6 text-4xl font-semibold text-neutral-800">Paramètres</Text>
 
       {/* Mon compte */}
@@ -118,6 +111,7 @@ export default function SettingsScreen() {
             Se déconnecter
             </Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   )

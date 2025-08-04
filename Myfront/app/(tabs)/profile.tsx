@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator, Alert, RefreshControl } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import TopNavbar from '@/components/TopNavbar'
 import api from '@/services/api'
 
 interface User {
@@ -97,7 +98,9 @@ export default function ProfileScreen() {
   const { user, policy } = profileData
 
   return (
-    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 40, paddingTop: 80 }}
+    <View className="flex-1 bg-gray-50">
+      <TopNavbar title="Profil" user={user} />
+      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#22B2DC']} />
       }
@@ -114,10 +117,11 @@ export default function ProfileScreen() {
       {/* User info */}
       <View className="items-center pt-12 pb-8 bg-white shadow-sm">
         <View className="relative">
-          <Image
-            source={{ uri: user.avatar }}
-            className="mb-5 bg-gray-200 border-4 border-white rounded-full shadow-md w-36 h-36"
-          />
+          <View className="mb-5 bg-[#22B2DC] border-4 border-white rounded-full shadow-md w-36 h-36 items-center justify-center">
+            <Text className="text-4xl font-bold text-white">
+              {user.fullName.charAt(0).toUpperCase()}
+            </Text>
+          </View>
           <View className="absolute right-0 p-2 bg-[#22B2DC] border-2 border-white rounded-full bottom-5">
             <MaterialIcons name="edit" size={20} color="white" />
           </View>
@@ -200,5 +204,6 @@ export default function ProfileScreen() {
         ))}
       </View>
     </ScrollView>
+    </View>
   )
 }
