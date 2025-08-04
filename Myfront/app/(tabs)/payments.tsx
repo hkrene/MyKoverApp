@@ -4,6 +4,7 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import TopNavbar from '@/components/TopNavbar'
+import { useUser } from '@/hooks/useUser'
 
 interface SubscriptionPlan {
   id: number
@@ -19,6 +20,7 @@ export default function PaymentScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const { user } = useUser()
 
   const subscriptionPlans: SubscriptionPlan[] = [
     {
@@ -132,7 +134,7 @@ export default function PaymentScreen() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <TopNavbar title="Plans d'abonnement" />
+      <TopNavbar title="Plans d'abonnement" user={user} />
 
       {/* Content */}
       <ScrollView className="flex-1 px-5 py-6">

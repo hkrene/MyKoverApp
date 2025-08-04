@@ -192,15 +192,18 @@ import { Link } from 'expo-router';
 import { FontAwesome5, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import TopNavbar from '@/components/TopNavbar';
+import { useUser } from '@/hooks/useUser';
 
 export default function HomePublic() {
+  const { user } = useUser();
+  
   const handleEmergencyCall = () => {
     Linking.openURL('tel:+243999999999');
   };
 
   return (
     <View className="flex-1 bg-gray-50">
-      <TopNavbar title="Accueil" />
+      <TopNavbar title="Accueil" user={user} />
       <ScrollView 
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 30 }}

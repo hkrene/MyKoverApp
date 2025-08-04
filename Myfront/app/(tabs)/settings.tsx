@@ -5,12 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Link, useRouter } from 'expo-router' // Added useRouter
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import TopNavbar from '@/components/TopNavbar'
+import { useUser } from '@/hooks/useUser'
 import api from '@/services/api'
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter() // Get router instance
   const [notifEnabled, setNotifEnabled] = React.useState(true)
+  const { user } = useUser()
 
   const handleLogout = async () => {
     Alert.alert(
@@ -62,7 +64,7 @@ export default function SettingsScreen() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <TopNavbar title="Paramètres" />
+      <TopNavbar title="Paramètres" user={user} />
       <View className="flex-1 px-5 pb-6">
       <Text className="mb-6 text-4xl font-semibold text-neutral-800">Paramètres</Text>
 

@@ -4,6 +4,7 @@ import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import TopNavbar from '@/components/TopNavbar'
+import { useUser } from '@/hooks/useUser'
 
 interface HealthcareFacility {
   id: number
@@ -24,6 +25,7 @@ export default function MapScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'hospital' | 'health_center' | 'pharmacy' | 'lab'>('all')
+  const { user } = useUser()
 
   const facilities: HealthcareFacility[] = [
     {
@@ -245,7 +247,7 @@ export default function MapScreen() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <TopNavbar title="Réseau Santé" />
+      <TopNavbar title="Réseau Santé" user={user} />
       
       <ScrollView className="flex-1 px-5 py-6">
         <Text className="mb-4 text-2xl font-bold text-gray-800">

@@ -15,7 +15,7 @@ interface TopNavbarProps {
   user?: {
     fullName: string
     avatar?: string
-  }
+  } | null
 }
 
 export default function TopNavbar({
@@ -43,7 +43,7 @@ export default function TopNavbar({
     if (onNotificationPress) {
       onNotificationPress()
     } else {
-      router.push('/notification')
+      router.push('/notification' as any)
     }
   }
 
@@ -60,9 +60,7 @@ export default function TopNavbar({
       className="flex-row items-center justify-between px-4 py-3 bg-white shadow-sm"
       style={{ 
         paddingTop: insets.top + 8,
-        paddingBottom: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.gray[200]
+        paddingBottom: 12
       }}
     >
       {/* Left Section */}
