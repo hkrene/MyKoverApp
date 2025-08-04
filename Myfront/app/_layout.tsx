@@ -56,6 +56,8 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         {/* 👇 This controls screen order */}
         <Stack.Screen name="onboarding" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
       </Stack>

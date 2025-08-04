@@ -1,15 +1,48 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, Switch } from 'react-native'
+import { View, Text, TouchableOpacity, Switch, Alert } from 'react-native'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Link, useRouter } from 'expo-router' // Added useRouter
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import api from '@/services/api'
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter() // Get router instance
   const [notifEnabled, setNotifEnabled] = React.useState(true)
 
-  const SettingItem = ({ icon, label, href }) => (
+  const handleLogout = async () => {
+    Alert.alert(
+      "Déconnexion",
+      "Êtes-vous sûr de vouloir vous déconnecter ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel"
+        },
+        {
+          text: "Déconnecter",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              // Call the logout API endpoint
+              await api.post('/auth/logout')
+            } catch (error) {
+              console.log('Logout API call failed, but continuing with local logout')
+            }
+
+            // Clear the authentication token from AsyncStorage
+            await AsyncStorage.removeItem('authToken')
+            
+            // Navigate to login screen
+            router.replace('/login')
+          }
+        }
+      ]
+    )
+  }
+
+  const SettingItem = ({ icon, label, href }: { icon: string; label: string; href: string }) => (
     <Link href={href} asChild>
       <TouchableOpacity
         activeOpacity={0.8}
@@ -78,9 +111,12 @@ export default function SettingsScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           className="flex-row items-center justify-center py-4 bg-red-100 rounded-full"
+          onPress={handleLogout}
         >
           <FontAwesome5 name="sign-out-alt" size={18} color="#DC2626" />
-          <Text className="ml-3 text-base font-semibold text-red-600">Se déconnecter</Text>
+          <Text className="ml-3 text-base font-semibold text-red-600" >
+            Se déconnecter
+            </Text>
         </TouchableOpacity>
       </View>
     </View>
