@@ -41,5 +41,8 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // ✅ Only this is needed for Railway DB
   DATABASE_URL: Env.schema.string(),
+  
+  // Google OAuth
+  GOOGLE_CLIENT_ID: Env.schema.string(),
 })
 

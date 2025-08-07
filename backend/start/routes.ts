@@ -18,6 +18,7 @@ router.get('/', async () => {
 router.group(() => {
   router.post('/signup', '#controllers/auth_controller.signup')
   router.post('/login', '#controllers/auth_controller.login')
+  router.post('/google', '#controllers/auth_controller.googleAuth')
   router.post('/logout', '#controllers/auth_controller.logout')
   router.get('/test-user/:phone', '#controllers/auth_controller.testUser')
 }).prefix('/auth')

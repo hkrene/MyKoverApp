@@ -1,22 +1,42 @@
 {
   "expo": {
     "name": "MyKover Plus",
-    "slug": "MyKover Plus",
+    "slug": "mykover-plus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/myKover+Logo.png",
-    "scheme": "myfront",
+    "scheme": "mykover",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mykover.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/myKover+Logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.mykover.app",
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "mykover"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",

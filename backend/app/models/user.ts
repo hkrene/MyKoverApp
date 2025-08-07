@@ -21,6 +21,12 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   declare password: string
 
+  @column({ columnName: 'google_id' })
+  declare googleId: string
+
+  @column({ columnName: 'google_email' })
+  declare googleEmail: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

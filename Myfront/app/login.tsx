@@ -17,12 +17,14 @@ import { router } from 'expo-router';
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '@/services/api';
+import googleAuth from '@/services/googleAuth';
 
 export default function LoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [passwordVisible, setPasswordVisible] = useState(false)
 
@@ -72,6 +74,7 @@ export default function LoginScreen() {
 
   const loginUser = async () => {
     try {
+      setIsLoading(true);
       console.log('Attempting login with:', { phoneNumber, password: password ? '***' : 'undefined' })
       console.log('API base URL:', api.defaults.baseURL)
       
@@ -108,8 +111,32 @@ export default function LoginScreen() {
       } else {
         Alert.alert("Erreur", "Impossible de contacter le serveur.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      console.log('Starting Google Sign-In...');
+      
+      const user = await googleAuth.signIn();
+      
+      if (user) {
+        Alert.alert("Succès", "Connexion Google réussie !");
+        router.replace('./(tabs)/home');
+      } else {
+        Alert.alert("Erreur", "Échec de la connexion Google.");
+      }
+    } catch (error: any) {
+      console.error('Google Sign-In error:', error);
+      Alert.alert("Erreur", "Erreur lors de la connexion Google.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const resetForm = () => {
     setPhoneNumber('');
     setPassword('');
@@ -196,64 +223,7 @@ export default function LoginScreen() {
             ) : null}
           </View>
 
-          {/* Test de connexion API */}
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#FF6B6B',
-              padding: 10,
-              borderRadius: 10,
-              width: 350,
-              height: 40,
-              alignItems: 'center',
-              marginTop: 10,
-            }}
-            onPress={async () => {
-              try {
-                console.log('Testing API connection...');
-                const response = await api.get('/');
-                console.log('Test response:', response.data);
-                Alert.alert("Test", "Connexion API réussie!");
-              } catch (error) {
-                console.error('Test error:', error);
-                Alert.alert("Test", "Erreur de connexion API");
-              }
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
-              Test Connexion API
-            </Text>
-          </TouchableOpacity>
-
-          {/* Test de connexion avec IP directe */}
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#FF8C00',
-              padding: 10,
-              borderRadius: 10,
-              width: 350,
-              height: 40,
-              alignItems: 'center',
-              marginTop: 10,
-            }}
-            onPress={async () => {
-              try {
-                console.log('Testing direct IP connection...');
-                const response = await fetch('http://172.24.157.111:3333/');
-                const data = await response.json();
-                console.log('Direct IP test response:', data);
-                Alert.alert("Test IP Direct", "Connexion IP directe réussie!");
-              } catch (error) {
-                console.error('Direct IP test error:', error);
-                Alert.alert("Test IP Direct", "Erreur de connexion IP directe");
-              }
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
-              Test IP Directe
-            </Text>
-          </TouchableOpacity>
-
-          {/* Bouton */}
+          {/* Bouton de connexion */}
           <TouchableOpacity
             style={{
               backgroundColor: '#22B2DC',
@@ -263,10 +233,46 @@ export default function LoginScreen() {
               height: 40,
               alignItems: 'center',
               marginTop: 10,
+              opacity: isLoading ? 0.7 : 1,
             }}
             onPress={handleSubmit}
+            disabled={isLoading}
           >
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Se connecter</Text>
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+              {isLoading ? 'Connexion...' : 'Se connecter'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Séparateur */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', width: 350, marginTop: 20 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'gray' }} />
+            <Text style={{ marginHorizontal: 10, color: 'gray' }}>ou</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'gray' }} />
+          </View>
+
+          {/* Bouton Google Sign-In */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'white',
+              borderWidth: 1,
+              borderColor: '#ddd',
+              padding: 10,
+              borderRadius: 10,
+              width: 350,
+              height: 40,
+              alignItems: 'center',
+              marginTop: 20,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              opacity: isLoading ? 0.7 : 1,
+            }}
+            onPress={handleGoogleSignIn}
+            disabled={isLoading}
+          >
+            <FontAwesome5 name="google" size={18} color="#DB4437" style={{ marginRight: 10 }} />
+            <Text style={{ color: '#333', fontSize: 16, fontWeight: 'bold' }}>
+              {isLoading ? 'Connexion...' : 'Continuer avec Google'}
+            </Text>
           </TouchableOpacity>
 
           {/* Lien d'inscription */}

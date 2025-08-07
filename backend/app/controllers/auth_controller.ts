@@ -2,8 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import { loginValidator, signupValidator } from '#validators/auth'
 import hash from '@adonisjs/core/services/hash'
-
-
+import GoogleAuthService from '#services/google_auth_service'
 
 export default class AuthController {
     async signup({ request, response }: HttpContext) {
@@ -28,7 +27,7 @@ export default class AuthController {
             user: user.serialize(),
             token,
           })
-        } catch (error) {
+        } catch (error: any) {
           console.error('SIGNUP ERROR', error)
       
           return response.badRequest({
@@ -55,9 +54,43 @@ export default class AuthController {
 
             const token = await User.accessTokens.create(user)
             return response.ok({ user: user.serialize(), token })
-        } catch (error) {
+        } catch (error: any) {
             console.error('LOGIN ERROR', error)
             return response.unauthorized({ message: 'Numéro de téléphone ou mot de passe incorrect' })
+        }
+    }
+
+    async googleAuth({ request, response }: HttpContext) {
+        try {
+            const { idToken } = request.only(['idToken'])
+            
+            if (!idToken) {
+                return response.badRequest({ message: 'Google token is required' })
+            }
+
+            const googleAuthService = new GoogleAuthService()
+            
+            // Verify Google token
+            const googleData = await googleAuthService.verifyGoogleToken(idToken)
+            console.log('GOOGLE DATA VERIFIED', googleData)
+
+            // Find or create user
+            const user = await googleAuthService.findOrCreateUser(googleData)
+            console.log('USER FOUND/CREATED', user.id, user.fullName)
+
+            // Create access token
+            const token = await User.accessTokens.create(user)
+
+            return response.ok({
+                user: user.serialize(),
+                token,
+                message: 'Google authentication successful'
+            })
+        } catch (error: any) {
+            console.error('GOOGLE AUTH ERROR', error)
+            return response.unauthorized({ 
+                message: error.message || 'Google authentication failed' 
+            })
         }
     }
 
@@ -77,11 +110,10 @@ export default class AuthController {
                 passwordHash: user.password,
                 createdAt: user.createdAt
             })
-        } catch (error) {
+        } catch (error: any) {
             return response.notFound({ message: 'User not found' })
         }
     }
-
 }
 
 
