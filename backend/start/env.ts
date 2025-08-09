@@ -30,6 +30,22 @@
 //   DB_DATABASE: Env.schema.string()
 // })
 
+// import { Env } from '@adonisjs/core/env'
+
+// export default await Env.create(new URL('../', import.meta.url), {
+//   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
+//   PORT: Env.schema.number(),
+//   APP_KEY: Env.schema.string(),
+//   HOST: Env.schema.string({ format: 'host' }),
+//   LOG_LEVEL: Env.schema.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
+
+//   // ✅ Only this is needed for Railway DB
+//   DATABASE_URL: Env.schema.string(),
+  
+//   // Google OAuth
+//   GOOGLE_CLIENT_ID: Env.schema.string(),
+// })
+
 import { Env } from '@adonisjs/core/env'
 
 export default await Env.create(new URL('../', import.meta.url), {
@@ -38,11 +54,18 @@ export default await Env.create(new URL('../', import.meta.url), {
   APP_KEY: Env.schema.string(),
   HOST: Env.schema.string({ format: 'host' }),
   LOG_LEVEL: Env.schema.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
+  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'file']),
 
-  // ✅ Only this is needed for Railway DB
-  DATABASE_URL: Env.schema.string(),
-  
+  // Database configuration
+  DB_HOST: Env.schema.string(),
+  DB_PORT: Env.schema.number(),
+  DB_USER: Env.schema.string(),
+  DB_PASSWORD: Env.schema.string(),
+  DB_DATABASE: Env.schema.string(),
+
   // Google OAuth
   GOOGLE_CLIENT_ID: Env.schema.string(),
+  
+  // Timezone
+  TZ: Env.schema.string(),
 })
-

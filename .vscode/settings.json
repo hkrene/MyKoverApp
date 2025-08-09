@@ -5,9 +5,9 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
-            "name": "Mykover+",
+            "name": "mykover",
             "database": "mykover",
-            "username": "postgres"
+            "username": "newton"
         }
     ]
 }
