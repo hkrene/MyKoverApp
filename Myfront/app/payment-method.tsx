@@ -154,7 +154,7 @@ export default function PaymentMethodScreen() {
 
         {/* Security Info */}
         <View className="p-4 mt-8 rounded-lg bg-green-50">
-          <Text className="mb-2 font-semibold text-green-800">🔒 Sécurité</Text>
+          <Text className="mb-2 font-semibold text-green-800">Sécurité</Text>
           <Text className="text-sm text-green-700">
             • Paiements sécurisés par CinetPay{'\n'}
             • Vos données sont protégées{'\n'}
